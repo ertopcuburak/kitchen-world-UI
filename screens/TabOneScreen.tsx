@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
+import { Button, SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
@@ -13,7 +13,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
       try {
         const response = await fetch(url);
         const json = await response.json();
-        console.log(json);
+        //console.log(json);
         setAdvice(json);
       } catch (error) {
         console.log("error", error);
@@ -31,28 +31,11 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
       {advice.map((recipe, index) => (
                     // Setting "index" as key because name and age can be repeated, It will be better if you assign uniqe id as key
                     <View style={styles.recipes}>
-                      <Text style={styles.title}>
-                      {recipe.name}
-                      </Text>
-                      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-
-                      <View style={styles.materials}>
-                        <Text style={styles.subtitle}>
-                          {'Malzemeler'}
-                        </Text>
-                        {recipe.materialList.map((material:any) => (
-                          <Text>
-                          {material.quantity + ' ' + material.materialName}
-                          </Text>
-                        ))}
-                      </View>
-                      
-                      <Text style={styles.subtitle}>
-                          {'Yapılışı'}
-                        </Text>
-                      <Text style={styles.bodyText}>
-                      {recipe.howToMake}
-                      </Text>
+                      <Button
+                        title={recipe.name}
+                        onPress={() => navigation.navigate('RecipeDetail', {itemId:recipe.id, name:recipe.name})}
+                      />
+                      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />                      
                     </View>
                 ))}
       </ScrollView>
@@ -72,6 +55,7 @@ const styles = StyleSheet.create({
   scrollView: {
     backgroundColor: '#72A2CF',
     marginHorizontal: 0,
+    width:'100%'
   },
   title: {
     fontSize: 20,
