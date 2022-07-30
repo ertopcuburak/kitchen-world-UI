@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Image } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
+import { environment } from '../environment/environment';
 import { RootTabScreenProps } from '../types';
 
 export default function RecipeDetailScreen({ route, navigation }: RootTabScreenProps<'RecipeDetail'>) {
@@ -10,7 +11,8 @@ export default function RecipeDetailScreen({ route, navigation }: RootTabScreenP
   const [materials, setMaterials] = useState<any[]>([]);
   const {itemId}  = route.params;
   useEffect(() => {
-    const url = "https://cb1b-5-27-31-231.eu.ngrok.io/recipes/"+itemId;
+    const apiUrl = environment();
+    const url = apiUrl+"/recipes/"+itemId;
     const fetchData = async () => {
       try {
         const response = await fetch(url);
@@ -40,6 +42,12 @@ export default function RecipeDetailScreen({ route, navigation }: RootTabScreenP
               {recipe.name}
             </Text>
             <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+
+            <Image 
+              source={{ uri:recipe.imageUrl }} 
+              style={styles.recipeImg}
+              resizeMode="cover"
+            />
 
             <View style={styles.materials}>
               <Text style={styles.subtitle}>
@@ -75,7 +83,7 @@ const styles = StyleSheet.create({
     paddingEnd: 0
   },
   scrollView: {
-    backgroundColor: '#72A2CF',
+    backgroundColor: 'white',
     width:'100%',
     marginHorizontal: 0,
   },
@@ -103,5 +111,9 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 20,
     paddingHorizontal: 20
+  },
+  recipeImg: {
+    height: 195,
+    width: 395
   }
 });
