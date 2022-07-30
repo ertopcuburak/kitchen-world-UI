@@ -41,8 +41,8 @@ function RootNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name="TabOne" component={TabOneScreen} options={({ route }) => ({ title: route.params.name })} />
-      <Stack.Screen name="RecipeDetail" component={RecipeDetailScreen} options={({ route }) => ({ title: route.params.name + ' Tarifi' })} />
+      <Stack.Screen name="TabOne" component={TabOneScreen} options={({ route }) => ({ title: route.params.name, headerBackTitle: 'Kategoriler' })} />
+      <Stack.Screen name="RecipeDetail" component={RecipeDetailScreen} options={({ route }) => ({ title: route.params.name + ' Tarifi', headerBackTitle: 'Geri' })} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
@@ -70,7 +70,7 @@ function BottomTabNavigator() {
         name="Category"
         component={CategoryScreen}
         options={({ navigation }: RootTabScreenProps<'Category'>) => ({
-          title: 'Yemek Tarifleri',
+          title: 'Kategoriler',
           tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
           headerRight: () => (
             <Pressable

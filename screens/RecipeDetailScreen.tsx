@@ -37,7 +37,7 @@ export default function RecipeDetailScreen({ route, navigation }: RootTabScreenP
       <ScrollView style={styles.scrollView}>
         {
           // Setting "index" as key because name and age can be repeated, It will be better if you assign uniqe id as key
-          <View style={styles.recipes}>
+          <View style={styles.recipes} key={recipe.id}>
             <Text style={styles.title}>
               {recipe.name}
             </Text>
