@@ -55,7 +55,7 @@ export default function RecipeDetailScreen({ route, navigation }: RootTabScreenP
               </Text>
               {materials.map((material: any) => (
                 <Text>
-                  {material.quantity + ' ' + material.materialName}
+                  {material.quantity ? material.quantity + ' ' + material.materialName : material.materialName}
                 </Text>
               ))}
             </View>
