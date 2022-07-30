@@ -46,7 +46,7 @@ export default function RecipeDetailScreen({ route, navigation }: RootTabScreenP
             <Image 
               source={{ uri:recipe.imageUrl }} 
               style={styles.recipeImg}
-              resizeMode="cover"
+              resizeMode="contain"
             />
 
             <View style={styles.materials}>
