@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, SafeAreaView, ScrollView, StyleSheet, TouchableHighlight, Image, Pressable } from 'react-native';
+import { Button, SafeAreaView, ScrollView, StyleSheet, TouchableHighlight, Image, Pressable, TouchableOpacity } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
@@ -31,32 +31,22 @@ export default function CategoryScreen({ navigation }: RootTabScreenProps<'Categ
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
       {categories.map((category, index) => (
-                    // Setting "index" as key because name and age can be repeated, It will be better if you assign uniqe id as key
-                    <View style={styles.recipes}>
-                      <View style={styles.imgCol}>
-                      <TouchableHighlight
-                              style={[styles.profileImgContainer, { borderColor: 'green', borderWidth:1 }]}
-                              onPress={() => navigation.navigate('TabOne', {categoryId:category.id, name:category.name})}
-                            >
-                        <Image 
-                          source={{ uri:category.imageUrl }} 
-                          style={styles.profileImg} 
-                        />
-                      </TouchableHighlight>
-                      </View>
-                      <View style={styles.textCol}>
-                      <Pressable 
-                        style={styles.categorySt} 
-                        onPress={() => navigation.navigate('TabOne', {categoryId:category.id, name:category.name})}
-                        >
-                        <Text style={styles.title}>{category.name}</Text>
-                      </Pressable>
-                      
-                      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" /> 
-                      </View>
-                                           
-                    </View>
-                ))}
+        <TouchableOpacity key={index} onPress={() => navigation.navigate('TabOne', {categoryId:category.id, name:category.name})}>
+        <View style={styles.box}>
+          <Image style={styles.image} source={{uri:category.imageUrl}} />
+          <View style={styles.info}>
+            <Text  style={styles.name}>{category.name}</Text>
+            
+            <View style={styles.row}>
+              <View style={styles.iconContainer}>
+                
+                <Text style={styles.iconFonts}>{category.description}</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </TouchableOpacity>
+      ))}
       </ScrollView>
     </SafeAreaView>
    
@@ -66,64 +56,62 @@ export default function CategoryScreen({ navigation }: RootTabScreenProps<'Categ
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#EEEEEE',
+    paddingTop:50,
+  },
+  icon:{
+    width:30,
+    height:30,
+  },
+  image: {
+    width: 150,
+    height:100
+  },
+  box: {
+    marginTop:10,
+    paddingStart:10,
+    paddingEnd:10,
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    shadowColor: 'black',
+    shadowOpacity: .2,
+    shadowOffset: {
+      height:1,
+      width:-2
+    },
+    elevation:2
+  },
+  info: {
+    flex:1,
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingStart:0,
-    paddingEnd:0
+  },
+  name: {
+    fontSize:20,
+    marginTop:10,
+    color: '#333'
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: 40,
+    marginTop:10
+  },
+  iconContainer: {
+    flex: 1,
+    alignItems:'center'
+  },
+  iconFonts: {
+    color: 'gray',
+  },
+  red: {
+    color: '#FF4500',
   },
   scrollView: {
     backgroundColor: 'white',
     marginHorizontal: 0,
     paddingTop:10,
     width:'100%',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  subtitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  bodyText: {
-    fontSize:16
-  },
-  separator: {
-    marginVertical: 10,
-    height: 1,
-    width: '100%',
-  },
-  recipes: {
-    paddingTop: 0,
-    paddingHorizontal:10,
-    flexWrap: 'wrap',
-    flexDirecton: 'row'
-  },
-  materials: {
-    paddingTop:20,
-    paddingBottom:20,
-    paddingHorizontal:20
-  },
-  profileImgContainer: {
-    marginLeft: 8,
-    height: 80,
-    width: 80,
-    borderRadius: 40,
-  },
-  profileImg: {
-    height: 80,
-    width: 80,
-    borderRadius: 40,
-  },
-  categorySt: {
-    width: '100%'
-  },
-  imgCol:{
-    flexBasis:'100%',
-    width: '100%'
-  },
-  textCol:{
-    flexBasis:'100%',
-    width: '100%'
   }
 });
