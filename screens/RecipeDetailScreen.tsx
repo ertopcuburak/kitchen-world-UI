@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Image } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Image, useWindowDimensions } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { environment } from '../environment/environment';
 import { RootTabScreenProps } from '../types';
+import RenderHtml from 'react-native-render-html';
 
 export default function RecipeDetailScreen({ route, navigation }: RootTabScreenProps<'RecipeDetail'>) {
   const [recipe, setRecipe] = useState<any>([]);
   const [materials, setMaterials] = useState<any[]>([]);
   const {itemId}  = route.params;
+  const { width } = useWindowDimensions();
+  const [source, setSource] = useState<any>({});
   useEffect(() => {
     const apiUrl = environment();
     const url = apiUrl+"/recipes/"+itemId;
@@ -19,6 +22,8 @@ export default function RecipeDetailScreen({ route, navigation }: RootTabScreenP
         const json = await response.json();
         console.log(json);
         setRecipe(json);
+        setSource({html:json.howToMake});
+        console.log("::source::",{html:source});
         if(json && json.materialList) {
           setMaterials(json.materialList);
         }
@@ -59,13 +64,13 @@ export default function RecipeDetailScreen({ route, navigation }: RootTabScreenP
                 </Text>
               ))}
             </View>
-
             <Text style={styles.subtitle}>
               {'Yapılışı'}
             </Text>
-            <Text style={styles.bodyText}>
-              {recipe.howToMake}
-            </Text>
+            <RenderHtml
+              contentWidth={width}
+              source={source}
+            />
           </View>
         }
       </ScrollView>
