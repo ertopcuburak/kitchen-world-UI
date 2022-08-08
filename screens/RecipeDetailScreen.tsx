@@ -12,7 +12,7 @@ export default function RecipeDetailScreen({ route, navigation }: RootTabScreenP
   const [materials, setMaterials] = useState<any[]>([]);
   const {itemId}  = route.params;
   const { width } = useWindowDimensions();
-  const [source, setSource] = useState<any>({});
+  const [source, setSource] = useState<any>({html:''});
   useEffect(() => {
     const apiUrl = environment();
     const url = apiUrl+"/recipes/"+itemId;
