@@ -6,33 +6,64 @@ import { Text, View } from '../components/Themed';
 import { environment } from '../environment/environment';
 import { RootTabScreenProps } from '../types';
 import RenderHtml from 'react-native-render-html';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { decode as atob, encode as btoa } from 'base-64';
 
 export default function RecipeDetailScreen({ route, navigation }: RootTabScreenProps<'RecipeDetail'>) {
   const [recipe, setRecipe] = useState<any>([]);
   const [materials, setMaterials] = useState<any[]>([]);
-  const {itemId}  = route.params;
+  const { itemId } = route.params;
   const { width } = useWindowDimensions();
-  const [source, setSource] = useState<any>({html:''});
+  const [source, setSource] = useState<any>({ html: '' });
   useEffect(() => {
-    const apiUrl = environment();
-    const url = apiUrl+"/recipes/"+itemId;
-    const fetchData = async () => {
-      try {
-        const response = await fetch(url);
-        const json = await response.json();
-        console.log(json);
-        setRecipe(json);
-        setSource({html:json.howToMake});
-        console.log("::source::",{html:source});
-        if(json && json.materialList) {
-          setMaterials(json.materialList);
-        }
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
 
-    fetchData();
+    const getData = async () => {
+      try {
+        const uname = await AsyncStorage.getItem('uname');
+        const sid = await AsyncStorage.getItem('sid');
+        if (uname !== null && sid !== null) {
+          const apiUrl = environment();
+          const url = apiUrl + "/recipes/" + itemId;
+          const fetchData = async () => {
+            try {
+              const base64Str = btoa(uname + ':' + sid);
+              console.log(base64Str);
+              const request = {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Basic ' + base64Str
+                },
+                body: null
+              };
+              console.log("::requesy::", request);
+              const response = await fetch(url, request);
+              //console.log("::no prob fetch::", JSON.stringify(response));
+              const json = await response.json();
+              //console.log(json);
+              setRecipe(json);
+              setSource({ html: json.howToMake });
+              //console.log("::source::", { html: source });
+              if (json && json.materialList) {
+                setMaterials(json.materialList);
+              }
+            } catch (error) {
+              console.log("error", error);
+            }
+          };
+
+
+          fetchData();
+        }
+      } catch (e) {
+        // error reading value
+      }
+    }
+
+    getData();
+
+
+
 
   }, []);
 
@@ -48,8 +79,8 @@ export default function RecipeDetailScreen({ route, navigation }: RootTabScreenP
             </Text>
             <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
 
-            <Image 
-              source={{ uri:recipe.imageUrl }} 
+            <Image
+              source={{ uri: recipe.imageUrl }}
               style={styles.recipeImg}
               resizeMode="contain"
             />
@@ -89,7 +120,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     backgroundColor: 'white',
-    width:'100%',
+    width: '100%',
     marginHorizontal: 0,
   },
   title: {
