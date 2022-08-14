@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
         width: '80%',
     },
     inputView: {
-        backgroundColor: "#FFC0CB",
+        backgroundColor: "#ABD2F7",
         borderRadius: 30,
         width: "80%",
         height: 45,
@@ -120,6 +120,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         marginTop: 40,
-        backgroundColor: "#FF1493",
+        backgroundColor: "#72A2CF",
     }
 });
